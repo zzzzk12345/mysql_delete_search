@@ -1,0 +1,12 @@
+{
+  "move": "-di",
+  "xlsxPath": "./xiaoqurelations_update(20190606).xlsx",
+  "db_username": "root",
+  "db_password":"werwer",
+  "db_url": "jdbc:mysql://localhost/xiaoqu?useUnicode=true&characterEncoding=utf-8",
+  "db_tablename":"xiaoqurelations_0617",
+  "delete_sheet_index":0,
+  "input_sheet_index":1,
+  "author": "bi_zhangkai",
+  "edit_date": "20190612"
+}
