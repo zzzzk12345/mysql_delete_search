@@ -225,11 +225,12 @@ public class Excel {
         // 查询和删除代码分开
 //        String sql_delete = "DELETE FROM "+TABLE_NAME+" WHERE id = ? AND city = ? AND district = ? AND block = ? "
 //              + "AND type = ? AND company = ? AND jingdui = ? AND jingdui_type = ? AND jingdui_district = ?;";
-        String sql_delete_ijj = "DELETE FROM "+TABLE_NAME+" WHERE id = ? AND jingdui = ? AND jingdui_type = ? ;";
+        String sql_delete_ijj = String.format("DELETE FROM %s WHERE id = ? AND jingdui = ? AND jingdui_type = ? ;", TABLE_NAME);
 
 //        String sql_query = "SELECT * FROM "+TABLE_NAME+" WHERE id = ? AND city = ? AND district = ? AND block = ? "
 //                + "AND type = ? AND company = ? AND jingdui = ? AND  jingdui_type = ? AND jingdui_district = ?;";
-        String sql_query_ijj = "SELECT * FROM "+TABLE_NAME+" WHERE id = ? AND jingdui = ? AND jingdui_type = ? ;";
+//        String sql_query_ijj = String.format("SELECT * FROM %s WHERE id = ? AND jingdui = ? AND jingdui_type = ? ;", TABLE_NAME);
+        String sql_query_ijj = String.format("SELECT id,jingdui,jingdui_type FROM %s WHERE id = ? AND jingdui = ? AND jingdui_type = ? ;", TABLE_NAME);
 
         PreparedStatement pst_delete = connectDB().prepareStatement(sql_delete_ijj);
         PreparedStatement pst_query = connectDB().prepareStatement(sql_query_ijj);
@@ -268,26 +269,17 @@ public class Excel {
 
 
     public void inputFromDB(List<XiaoQuRelations> list) throws ClassNotFoundException,SQLException{
-    // 查询和删除代码分开
-    String sql_query =
-        "SELECT * FROM "+TABLE_NAME+" WHERE id = ? AND city = ? AND district = ? AND block = ? "
-            + "AND type = ? AND Company = ? AND jingdui = ? AND note = ? AND jingdui_type = ? AND jingdui_district = ?;";
-        String sql_insert = "INSERT INTO "+TABLE_NAME+" VALUES(?,?,?,?,?,?,?,?,?,?)";
+    // 查询和添加代码分开
+        String sql_query = String.format("SELECT id,jingdui,jingdui_type FROM %s WHERE id = ? AND jingdui = ? AND jingdui_type = ? ;", TABLE_NAME);
+        String sql_insert = String.format("INSERT INTO %s VALUES(?,?,?,?,?,?,?,?,?,?)", TABLE_NAME);
         PreparedStatement pst_query = connectDB().prepareStatement(sql_query);
         PreparedStatement pst_insert = connectDB().prepareStatement(sql_insert);
         int affected_rows = 0;
         // 遍历表格中的添加数据
         for (XiaoQuRelations xiaoqu : list) {
-            pst_query.setString(1, xiaoqu.getId() + "");
-            pst_query.setString(2, xiaoqu.getCity());
-            pst_query.setString(3, xiaoqu.getDistrict());
-            pst_query.setString(4, xiaoqu.getBlock());
-            pst_query.setString(5, xiaoqu.getType());
-            pst_query.setString(6, xiaoqu.getCompany());
-            pst_query.setString(7, xiaoqu.getJingdui());
-            pst_query.setString(8, xiaoqu.getNote());
-            pst_query.setString(9, xiaoqu.getJingdui_type());
-            pst_query.setString(10, xiaoqu.getJingdui_district());
+            pst_query.setString(1,xiaoqu.getId()+"");
+            pst_query.setString(2,xiaoqu.getJingdui());
+            pst_query.setString(3,xiaoqu.getJingdui_type());
             ResultSet rs = pst_query.executeQuery();
             Boolean result = rs.next();
             System.out.println("查询结果："+result);
@@ -320,7 +312,7 @@ public class Excel {
 
     public static void test(String id)throws ClassNotFoundException,SQLException{
 
-        String sql_query = "SELECT * FROM "+TABLE_NAME+" WHERE id = ?;";
+        String sql_query = String.format("SELECT * FROM %s WHERE id = ?;", TABLE_NAME);
         PreparedStatement pst_query = connectDB().prepareStatement(sql_query);
         pst_query.setString(1,id);
 //        pst_query.setString(2,id);
@@ -336,6 +328,7 @@ public class Excel {
     }
     //***************************************************************************************
     public static void main(String[] args){
+        long start=System.currentTimeMillis();
         Excel ex = new Excel();
         // -d 代表删除 -i代表添加 -t表示测试
 //        if (args[0].equals("-d")) {
@@ -348,7 +341,8 @@ public class Excel {
             } catch (Exception e) {
             e.printStackTrace();
             }
-        }else if (ex.MOVE.equals("-i")){
+        }
+        else if (ex.MOVE.equals("-i")){
             // 执行添加操作
             try {
                 List<XiaoQuRelations>  input_lst = ex.input_ExcelInfo();
@@ -358,7 +352,8 @@ public class Excel {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }else if (ex.MOVE.equals("-di") || ex.MOVE.equals("-id")){
+        }
+        else if (ex.MOVE.equals("-di") || ex.MOVE.equals("-id")){
             // 执行添加+删除
             try {
                 List<XiaoQuRelations>  delete_lst = ex.delete_ExcelInfo();
@@ -382,5 +377,7 @@ public class Excel {
         }else{
             System.out.println("请正确输入参数！-d表示删除，-i表示添加");
         }
+        Long end=System.currentTimeMillis();
+        System.out.println("用时："+(end-start));
     }
 }
