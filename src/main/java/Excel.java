@@ -2,6 +2,8 @@ import java.io.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -167,6 +169,7 @@ public class Excel {
                             info.setCompany(r.getCell(5).getStringCellValue());
                             break;
                         case 6:
+                            r.getCell(6).setCellType(CellType.STRING);
                             info.setJingdui(r.getCell(6).getStringCellValue());
                             break;
                         case 7:
