@@ -1,10 +1,10 @@
 {
-  "move": "-d",
-  "xlsxPath": "./xiaoqurelations_update(20190606).xlsx",
+  "move": "-di",
+  "xlsxPath": "./xiaoqurelations(导入)-20190730.xlsx",
   "db_username": "root",
   "db_password":"w5631583",
   "db_url": "jdbc:mysql://localhost:3306/lh?useUnicode=true&characterEncoding=utf-8",
-  "db_tablename":"xiaoqurelations_0617",
+  "db_tablename":"xiaoqurelations",
   "delete_sheet_index":0,
   "input_sheet_index":1,
   "author": "bi_zhangkai",

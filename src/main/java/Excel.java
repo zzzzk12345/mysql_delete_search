@@ -111,7 +111,8 @@ public class Excel {
                             info.setNote(r.getCell(7).getStringCellValue());
                             break;
                         case 8:
-                            info.setJingdui_type(r.getCell(8).getStringCellValue());
+//                            System.out.println(r.getCell(8));
+                            info.setJingdui_type(r.getCell(8).toString());
                             break;
                         case 9:
                             info.setJingdui_district(r.getCell(9).getStringCellValue());
@@ -172,7 +173,7 @@ public class Excel {
                             info.setNote(r.getCell(7).getStringCellValue());
                             break;
                         case 8:
-                            info.setJingdui_type(r.getCell(8).getStringCellValue());
+                            info.setJingdui_type(r.getCell(8).toString());
                             break;
                         case 9:
                             info.setJingdui_district(r.getCell(9).getStringCellValue());
@@ -225,12 +226,12 @@ public class Excel {
         // 查询和删除代码分开
 //        String sql_delete = "DELETE FROM "+TABLE_NAME+" WHERE id = ? AND city = ? AND district = ? AND block = ? "
 //              + "AND type = ? AND company = ? AND jingdui = ? AND jingdui_type = ? AND jingdui_district = ?;";
-        String sql_delete_ijj = String.format("DELETE FROM %s WHERE id = ? AND jingdui = ? AND jingdui_type = ? ;", TABLE_NAME);
+        String sql_delete_ijj = String.format("DELETE FROM %s WHERE id = ? AND jingdui = ? AND jingdui_type = ? AND note=?;", TABLE_NAME);
 
 //        String sql_query = "SELECT * FROM "+TABLE_NAME+" WHERE id = ? AND city = ? AND district = ? AND block = ? "
 //                + "AND type = ? AND company = ? AND jingdui = ? AND  jingdui_type = ? AND jingdui_district = ?;";
 //        String sql_query_ijj = String.format("SELECT * FROM %s WHERE id = ? AND jingdui = ? AND jingdui_type = ? ;", TABLE_NAME);
-        String sql_query_ijj = String.format("SELECT id,jingdui,jingdui_type FROM %s WHERE id = ? AND jingdui = ? AND jingdui_type = ? ;", TABLE_NAME);
+        String sql_query_ijj = String.format("SELECT id,jingdui,jingdui_type,note FROM %s WHERE id = ? AND jingdui = ? AND jingdui_type = ? AND note=?;", TABLE_NAME);
 
         PreparedStatement pst_delete = connectDB().prepareStatement(sql_delete_ijj);
         PreparedStatement pst_query = connectDB().prepareStatement(sql_query_ijj);
@@ -243,7 +244,10 @@ public class Excel {
             pst_query.setString(1,xiaoqu.getId()+"");
             pst_query.setString(2,xiaoqu.getJingdui());
             pst_query.setString(3,xiaoqu.getJingdui_type());
-            ResultSet rs = pst_query.executeQuery();
+            if (xiaoqu.getNote()==null)
+                pst_query.setString(4,"null");
+            else
+                pst_query.setString(4,xiaoqu.getNote());            ResultSet rs = pst_query.executeQuery();
             boolean result = rs.next();
             System.out.println("查询结果："+xiaoqu.getId()+" "+result);
 //             如果查得到就删除,查不到则不处理
@@ -253,7 +257,10 @@ public class Excel {
                 pst_delete.setString(1, xiaoqu.getId() + "");
                 pst_delete.setString(2, xiaoqu.getJingdui());
                 pst_delete.setString(3, xiaoqu.getJingdui_type());
-//                System.out.println(pst_delete.toString());
+                if (xiaoqu.getNote()==null)
+                    pst_delete.setString(4,"null");
+                else
+                    pst_delete.setString(4,xiaoqu.getNote());//                System.out.println(pst_delete.toString());
                 int row = pst_delete.executeUpdate();
                 if(row!=0){
                     affected_rows += row;
@@ -270,7 +277,7 @@ public class Excel {
 
     public void inputFromDB(List<XiaoQuRelations> list) throws ClassNotFoundException,SQLException{
     // 查询和添加代码分开
-        String sql_query = String.format("SELECT id,jingdui,jingdui_type FROM %s WHERE id = ? AND jingdui = ? AND jingdui_type = ? ;", TABLE_NAME);
+        String sql_query = String.format("SELECT id,jingdui,jingdui_type FROM %s WHERE id = ? AND jingdui = ? AND jingdui_type = ? AND note=?;", TABLE_NAME);
         String sql_insert = String.format("INSERT INTO %s VALUES(?,?,?,?,?,?,?,?,?,?)", TABLE_NAME);
         PreparedStatement pst_query = connectDB().prepareStatement(sql_query);
         PreparedStatement pst_insert = connectDB().prepareStatement(sql_insert);
@@ -280,8 +287,14 @@ public class Excel {
             pst_query.setString(1,xiaoqu.getId()+"");
             pst_query.setString(2,xiaoqu.getJingdui());
             pst_query.setString(3,xiaoqu.getJingdui_type());
+            if (xiaoqu.getNote()==null)
+                pst_query.setString(4,"null");
+            else
+                pst_query.setString(4,xiaoqu.getNote());
             ResultSet rs = pst_query.executeQuery();
             Boolean result = rs.next();
+            if (xiaoqu.getId()==0)
+                continue;
             System.out.println("查询结果："+result);
             // 如果查得到就不处理,查不到则添加
             if (result==false) {
@@ -372,7 +385,7 @@ public class Excel {
             // 执行测试，删除或者添加成功与否，使用select查找id
             try{
                 //输入测试id
-                Excel.test("41231");
+                Excel.test("33238");
             }catch(Exception e){e.printStackTrace();}
         }else{
             System.out.println("请正确输入参数！-d表示删除，-i表示添加");
