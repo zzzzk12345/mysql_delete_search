@@ -1,9 +1,9 @@
 {
   "move": "-di",
-  "xlsxPath": "./xiaoqurelations(导入)-20190730.xlsx",
+  "xlsxPath": "xiaoqurelations(导入)-20190826.xlsx",
   "db_username": "root",
-  "db_password":"w5631583",
-  "db_url": "jdbc:mysql://localhost:3306/lh?useUnicode=true&characterEncoding=utf-8",
+  "db_password":"werwer",
+  "db_url": "jdbc:mysql://localhost:3306/xiaoqu?useUnicode=true&characterEncoding=utf-8",
   "db_tablename":"xiaoqurelations",
   "delete_sheet_index":0,
   "input_sheet_index":1,

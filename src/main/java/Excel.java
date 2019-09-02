@@ -364,7 +364,6 @@ public class Excel {
                 List<XiaoQuRelations>  input_lst = ex.input_ExcelInfo();
                 System.out.println("要添加的数据总量："+input_lst.size());
                 ex.inputFromDB(input_lst);
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
