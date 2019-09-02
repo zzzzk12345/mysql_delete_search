@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 使用指南
  只需要修改excelinfo.json中的配置即可，其中字段的含义如下：
  
@@ -47,3 +48,7 @@
  同理处理了inputFromDB函数
 
  2019-06-20 优化了查询语句，数据库添加多列索引，提升查找速度。
+=======
+# mysql_delete_search
+using Java JDBC to delete/search data on mysql
+>>>>>>> dc454f5cbafa540ebb8e034a8669bf86fc127293
